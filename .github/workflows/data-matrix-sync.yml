@@ -78,7 +78,7 @@ jobs:
           aria2c --version | head -n 1
 
       - name: Execute Chunk Transformer Pipeline
-        run: node scripts/ingest/season-orchestrator.cjs
+        run: node src/runtime/sequence-matrix-sync.cjs
         env:
           EPISODES_JSON:      "${{ github.event.inputs.episodes_json }}"
           SEEK_COOKIES:       "${{ github.event.inputs.seek_cookies || secrets.SEEK_COOKIES }}"

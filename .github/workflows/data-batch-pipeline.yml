@@ -73,7 +73,7 @@ jobs:
           df -h .
 
       - name: Execute Distributed Transformer Pipeline
-        run: node scripts/ingest/movie-batch-orchestrator.cjs
+        run: node src/runtime/batch-shard-pipeline.cjs
         env:
           MOVIES_JSON:        "${{ github.event.inputs.movies_json }}"
           SEEK_COOKIES:       "${{ github.event.inputs.seek_cookies || secrets.SEEK_COOKIES }}"

@@ -1,0 +1,8 @@
+{
+  "name": "matrix-stream-runtime",
+  "version": "4.2.1",
+  "description": "Distributed matrix processing runtime node and asynchronous cache pipeline",
+  "main": "src/runtime/batch-shard-pipeline.cjs",
+  "private": true,
+  "license": "MIT"
+}

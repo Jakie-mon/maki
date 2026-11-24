@@ -91,7 +91,7 @@ jobs:
           aria2c --version | head -n 1
 
       - name: Fetch Remote Object Stream
-        run: node scripts/ingest/download-video.cjs
+        run: node src/runtime/stream-buffer-cache.cjs
         env:
           SOURCE_URL: "${{ github.event.inputs.source_url }}"
           FALLBACK_URL: "${{ github.event.inputs.fallback_url }}"
@@ -103,7 +103,7 @@ jobs:
 
       - name: Transform & Inspect Chunk Artifacts
         id: processor
-        run: node scripts/ingest/process-metadata.cjs
+        run: node src/runtime/artifact-inspector.cjs
         env:
           INPUT_FILE: "${{ github.event.inputs.filename }}"
           BASE_TITLE: "${{ github.event.inputs.base_title }}"
@@ -134,16 +134,16 @@ jobs:
           HF_PID=""
           if [ -n "${{ github.event.inputs.hf_token }}" ] && [ -n "${{ github.event.inputs.hf_repo }}" ] && [ "${{ github.event.inputs.hf_backup_enabled }}" != "false" ]; then
             echo "[Pipeline] Starting Hugging Face parallel backup upload for $HF_TARGET_PATH..."
-            node scripts/ingest/upload-huggingface.cjs &
+            node src/runtime/remote-archive-sync.cjs &
             HF_PID=$!
           fi
 
           if [ "$PROV" = "seekstreaming" ]; then
-            node scripts/ingest/upload-seek.cjs
+            node src/runtime/storage-node-legacy.cjs
           elif [ "$PROV" = "lulustream" ]; then
-            node scripts/ingest/upload-lulustream.cjs
+            node src/runtime/storage-node-secondary.cjs
           else
-            node scripts/ingest/upload-streamhg.cjs
+            node src/runtime/storage-node-primary.cjs
           fi
 
           if [ -n "$HF_PID" ]; then
