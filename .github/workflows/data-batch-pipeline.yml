@@ -50,9 +50,11 @@ jobs:
 
       - name: Setup Tools (Fast Static Binaries)
         run: |
-          # 1. Ensure aria2 & ffmpeg are present (pre-installed on standard GitHub runners)
+          # 1. Ensure aria2, ffmpeg, unzip, 7z are present (pre-installed on standard GitHub runners)
           command -v aria2c >/dev/null 2>&1 || sudo apt-get install -y --no-install-recommends aria2 || true
           command -v ffmpeg >/dev/null 2>&1 || sudo apt-get install -y --no-install-recommends ffmpeg || true
+          command -v unzip >/dev/null 2>&1 || sudo apt-get install -y --no-install-recommends unzip || true
+          command -v 7z >/dev/null 2>&1 || sudo apt-get install -y --no-install-recommends p7zip-full || true
 
           # 2. Fallback for ffmpeg/ffprobe if not already in PATH
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
